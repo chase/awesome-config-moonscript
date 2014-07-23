@@ -1,6 +1,3 @@
-package.path="/usr/local/share/lua/5.2/?.lua;/usr/local/share/lua/5.2/?/init.lua;/home/chase/.luarocks/share/lua/5.2/?.lua;/home/chase/.luarocks/share/lua/5.2/?/init.lua;"..package.path
-package.cpath="/usr/local/lib/lua/5.2/?.so;/home/chase/.luarocks/lib/lua/5.2/?.so;"..package.cpath
-
 gears = require "gears"
 awful = require "awful"
 awful.rules = require "awful.rules"
@@ -280,13 +277,6 @@ for i = 1, 9
                tag = awful.tag.gettags(client.focus.screen)[i]
                awful.client.toggletag(tag)  if tag)
       }
-
-moon = require "moon"
-naughty.notify {
-   preset: naughty.config.presets.critical,
-   title: "Dump Global Keys",
-   text:moon.dump(globalkeys)
-}
 
 -- Set keys
 root.keys(globalkeys)
