@@ -8,6 +8,7 @@ naughty = require "naughty"
 menubar = require "menubar"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
+curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
 
 interceptSpotify = (data, appname, replaces_id, icon, title, text, actions, hints, expire)->
    if appname == "Spotify"
@@ -88,8 +89,7 @@ mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {
    buttons: do
-      button = awful.button
-      tag = awful.tag
+      :button, :tag = awful
       unpackJoin {
          button({}, 1, tag.viewonly)
          button({modkey}, 1, client.movetotag)
@@ -102,7 +102,7 @@ mytaglist = {
 
 mytasklist = {
    buttons: do
-      button = awful.button
+      :button = awful
       unpackJoin {
          button({}, 1, (c)->
             if c == client.focus
@@ -134,12 +134,13 @@ for s = 1, screen.count!
    -- Create an imagebox widget which will contains an icon indicating which layout we're using.
    -- We need one layoutbox per screen.
    mylayoutbox[s] = awful.widget.layoutbox(s)
-   with awful
-      mylayoutbox[s]\buttons unpackJoin {
-         .button({}, 1, -> .layout.inc( 1)),
-         .button({}, 3, -> .layout.inc(-1)),
-         .button({}, 4, -> .layout.inc( 1)),
-         .button({}, 5, -> .layout.inc(-1))
+   mylayoutbox[s]\buttons do
+      :button, :layout = awful
+      unpackJoin {
+         button({}, 1, -> layout.inc( 1)),
+         button({}, 3, -> layout.inc(-1)),
+         button({}, 4, -> layout.inc( 1)),
+         button({}, 5, -> layout.inc(-1))
       }
    -- Create a taglist widget
    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
@@ -180,9 +181,7 @@ with awful
 
 -- {{{ Key bindings
 globalkeys = do
-   key = awful.key
-   tag = awful.tag
-   launch = awful.util.spawn
+   :key, :tag, util:spawn:launch = awful
    unpackJoin {
       key({modkey}, "Left", tag.viewprev),
       key({modkey}, "Right", tag.viewnext),
@@ -235,7 +234,7 @@ globalkeys = do
    }
 
 clientkeys = do
-   key = awful.key
+   :key = awful
    unpackJoin {
       key({modkey}, "q", (c)-> c\kill!),
       key({modkey, "Control"}, "space",  awful.client.floating.toggle),
@@ -253,7 +252,7 @@ clientkeys = do
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 9
    globalkeys = do
-      key = awful.key
+      :key = awful
       unpackJoin {
          globalkeys,
          -- View tag only.
