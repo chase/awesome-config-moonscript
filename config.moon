@@ -6,6 +6,7 @@ wibox = require "wibox"
 beautiful = require "beautiful"
 naughty = require "naughty"
 menubar = require "menubar"
+mouseHandler = require "mouseHandler"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
@@ -89,43 +90,41 @@ mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {
    buttons: do
-      :button, :tag = awful
-      unpackJoin {
-         button({}, 1, tag.viewonly)
-         button({modkey}, 1, client.movetotag)
-         button({}, 3, tag.viewtoggle)
-         button({modkey}, 3, client.toggletag)
-         button({}, 4, (t)-> tag.viewnext(tag.getscreen(t)))
-         button({}, 5, (t)-> tag.viewprev(tag.getscreen(t)))
-      }
+      :tag = awful
+      mouseHandler
+         left: tag.viewonly
+         right: tag.viewtoggle
+         scroll:
+            up: (t)-> tag.viewnext(tag.getscreen(t))
+            down: (t)-> tag.viewprev(tag.getscreen(t))
+         meta:
+            left: client.movetotag
+            right: client.toggletag
 }
 
 mytasklist = {
-   buttons: do
-      :button = awful
-      unpackJoin {
-         button({}, 1, (c)->
-            if c == client.focus
-               c.minimized = true
-            else
-               c.minimized = false
-               if not c\isvisible!
-                  awful.tag.viewonly(c\tags![1])
-               client.focus = c
-               c\raise!),
-         button({}, 3, ->
-               if not instance
-                  instance = awful.menu.clients(theme: width: 250)
-               else
-                  instance\hide!
-                  instance = nil),
-         button({}, 4, ->
+   buttons: mouseHandler
+      left: (c)->
+         if c == client.focus
+            c.minimized = true
+         else
+            c.minimized = false
+            awful.tag.viewonly(c\tags![1])  if not c\isvisible!
+            client.focus = c
+            c\raise!
+      right: ->
+         if not instance
+            instance = awful.menu.clients(theme: width: 250)
+         else
+            instance\hide!
+            instance = nil
+      scroll:
+         up: ->
             awful.client.focus.byidx(1)
-            client.focus\raise!  if client.focus),
-         button({}, 5, ->
+            client.focus\raise!  if client.focus
+         down: ->
             awful.client.focus.byidx(-1)
-            client.focus\raise!  if client.focus)
-      }
+            client.focus\raise!  if client.focus
 }
 
 for s = 1, screen.count!
@@ -135,13 +134,13 @@ for s = 1, screen.count!
    -- We need one layoutbox per screen.
    mylayoutbox[s] = awful.widget.layoutbox(s)
    mylayoutbox[s]\buttons do
-      :button, :layout = awful
-      unpackJoin {
-         button({}, 1, -> layout.inc( 1)),
-         button({}, 3, -> layout.inc(-1)),
-         button({}, 4, -> layout.inc( 1)),
-         button({}, 5, -> layout.inc(-1))
-      }
+      :layout = awful
+      mouseHandler
+         left: -> layout:inc(1)
+         right: -> layout:inc(-1)
+         scroll:
+            up: -> layout:inc(1)
+            down: -> layout:inc(-1)
    -- Create a taglist widget
    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
@@ -172,11 +171,10 @@ for s = 1, screen.count!
 -- }}}
 
 -- {{{ Mouse bindings
-with awful
-   root.buttons unpackJoin {
-      .button {}, 4, .tag.viewnext,
-      .button {}, 5, .tag.viewprev
-   }
+   root.buttons mouseHandler
+      scroll:
+         up: awful.tag.viewnext
+         down: awful.tag.viewprev
 -- }}}
 
 -- {{{ Key bindings
@@ -282,13 +280,13 @@ root.keys(globalkeys)
 
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
-clientbuttons = unpackJoin {
-   awful.button({}, 1, (c)->
+clientbuttons = mouseHandler
+   left: (c)->
       client.focus = c
-      c\raise!),
-   awful.button({modkey}, 1, awful.mouse.client.move),
-   awful.button({modkey}, 3, awful.mouse.client.resize)
-}
+      c\raise!
+   meta:
+      left: awful.mouse.client.move
+      right: awful.mouse.client.resize
 
 awful.rules.rules = {
    {

@@ -13,3 +13,5 @@ mouse =
 
 mouseHandler = (value) ->
    return mapHandler(value, mouse, awful.button)
+
+return mouseHandler

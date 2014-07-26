@@ -65,3 +65,5 @@ translateHandler = (value, map, parent={modifiers:{}})->
          table.insert(result, handler)
 
    return result
+
+return translateHandler
