@@ -2,8 +2,9 @@ mod =
    meta: 'Mod4'
    alt: 'Mod1'
    ctrl: 'Control'
+   shift: 'Shift'
 
-translateHandler = (value, map, parent={modifiers:{}})->
+translateHandler = (value, map, parent={})->
    -- Initialize
    result = {}
    handles = nil
@@ -25,19 +26,25 @@ translateHandler = (value, map, parent={modifiers:{}})->
 
       -- Make implicit handlers explicit
       if valueType == 'function'
-         value = { up: value }
-      elseif valueType == 'table' and not value.up
-         value.up = value[1]  if type(value[1]) == 'function'
+         if parent.implicitUp
+            value = { up: value }
+         else
+            value = { down: value }
+      elseif valueType == 'table' and type(value[1]) == 'function'
+         if parent.implicitUp and not value.up
+            value.up = value[1]
+         elseif not value.down
+            value.down = value[1]
 
       subresult =
-         modifiers: parent.modifiers
+         modifiers: parent.modifiers or {}
          :handles
 
       for subkey in *{'up', 'down'}
          -- There is a handler map override for up or down
-         if type(map[key]) == 'table' and map[key][subkey]
+         if type(map) == 'table' and type(map[key]) == 'table' and map[key][subkey]
             table.insert(result, {
-               modifiers: parent.modifiers
+               modifiers: parent.modifiers or {}
                handles: map[key][subkey]
                up: value[subkey]
             })
@@ -55,7 +62,7 @@ translateHandler = (value, map, parent={modifiers:{}})->
       -- Up and down are handled explicitly above, skip them
       continue  if subkey == 'up' or subkey == 'down'
 
-      modifiers = parent.modifiers
+      modifiers = parent.modifiers or {}
       -- Add modifiers to parent modifiers
       if modifier = mod[subkey]
          modifiers = [v for v in *modifiers]

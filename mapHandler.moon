@@ -1,10 +1,10 @@
 translateHandler = require 'translateHandler'
 
-mapHandler = (value, transform, mapFunction) ->
+mapHandler = (value, transform, mapFunction, implicitUp) ->
    result = {}
-   for handler in *translateHandler(value, transform)
+   for handler in *translateHandler(value, transform, {:implicitUp})
       import modifiers, handles, up, down from handler
-      for k, v in pairs mapFunction(modifiers, handles, up, down)
+      for k, v in pairs mapFunction(modifiers, handles, down, up)
          if type(k) == 'number'
             table.insert(result, v)
          else

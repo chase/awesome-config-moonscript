@@ -7,6 +7,7 @@ beautiful = require "beautiful"
 naughty = require "naughty"
 menubar = require "menubar"
 mouseHandler = require "mouseHandler"
+keyHandler = require "keyHandler"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
@@ -179,100 +180,99 @@ for s = 1, screen.count!
 
 -- {{{ Key bindings
 globalkeys = do
-   :key, :tag, util:spawn:launch = awful
-   unpackJoin {
-      key({modkey}, "Left", tag.viewprev),
-      key({modkey}, "Right", tag.viewnext),
-      key({modkey}, "j", ->
-         awful.client.focus.byidx(1)
-         client.focus\raise!  if client.focus),
-      key({modkey}, "k", ->
-         awful.client.focus.byidx(-1)
-         client.focus\raise!  if client.focus),
+   :tag, util:spawn:launch = awful
+   keyHandler
        -- Volume keys
-      key({}, "XF86AudioRaiseVolume", -> launch("amixer set Master 9%+", false)),
-      key({}, "XF86AudioLowerVolume", -> launch("amixer set Master 9%-", false)),
-      key({}, "XF86AudioMute", -> launch("amixer set Master toggle", false)),
+      "XF86AudioRaiseVolume": -> launch("amixer set Master 9%+", false)
+      "XF86AudioLowerVolume": -> launch("amixer set Master 9%-", false)
+      "XF86AudioMute": -> launch("amixer set Master toggle", false)
       -- Media keys
-      key({}, "XF86AudioPrev", -> launch("playerctl previous", false)),
-      key({}, "XF86AudioPlay", -> launch("playerctl play-pause", false)),
-      key({}, "XF86AudioNext", -> launch("playerctl next", false)),
-      -- Layout manipulation
-      key({modkey, "Shift"}, "j", -> awful.client.swap.byidx(1)),
-      key({modkey, "Shift"}, "k", -> awful.client.swap.byidx(-1)),
-      key({modkey, "Control"}, "j", -> awful.screen.focus_relative(1)),
-      key({modkey, "Control"}, "k", -> awful.screen.focus_relative(-1)),
-      key({modkey}, "u", awful.client.urgent.jumpto),
-      key({modkey}, "Tab", ->
-         awful.client.focus.history.previous!
-         client.focus\raise!  if client.focus),
-      -- Standard program
-      key({modkey}, "f", -> launch("thunar")),
-      key({modkey}, "e", -> launch(editor)),
-      key({modkey}, "w", -> launch("chromium")),
-      key({modkey}, "r", -> launch("xboomx"), false),
-      key({modkey}, "Return", -> launch(terminal)),
+      "XF86AudioPrev": -> launch("playerctl previous", false)
+      "XF86AudioPlay": -> launch("playerctl play-pause", false)
+      "XF86AudioNext": -> launch("playerctl next", false)
+      meta:
+         -- Standard programs
+         f: -> launch("thunar")
+         e: -> launch(editor)
+         w: -> launch("chromium")
+         r: -> launch("xboomx", false)
+         "Return": -> launch(terminal)
+         -- Jump between tags
+         "Left": tag.viewprev
+         "Right": tag.viewnext
+         -- Layout manipulation
+         j: ->
+            awful.client.focus.byidx(1)
+            client.focus\raise!  if client.focus
+         k: ->
+            awful.client.focus.byidx(-1)
+            client.focus\raise!  if client.focus
+         u: awful.client.urgent.jumpto
+         "Tab": ->
+            awful.client.focus.history.previous!
+            client.focus\raise!  if client.focus
+         l: -> awful.tag.incmwfact(0.05)
+         h: -> awful.tag.incmwfact(-0.05)
+         space: -> awful.layout.inc(awful.layout.layouts, 1, 1)
+         -- Menubar
+         p: -> menubar.show!
 
-      key({modkey}, "l", -> awful.tag.incmwfact(0.05)),
-      key({modkey}, "h", -> awful.tag.incmwfact(-0.05)),
-      key({modkey, "Shift"}, "h", -> awful.tag.incnmaster(1)),
-      key({modkey, "Shift"}, "l", -> awful.tag.incnmaster(-1)),
-      key({modkey, "Control"}, "h", -> awful.tag.incncol(1)),
-      key({modkey, "Control"}, "l", -> awful.tag.incncol(-1)),
-      key({modkey}, "space", -> awful.layout.inc(awful.layout.layouts, 1, 1)),
-      key({modkey, "Shift"}, "space", -> awful.layout.inc(awful.layout.layouts,-1, 1)),
-      key({modkey, "Control"}, "r", awesome.restart),
-      key({modkey, "Shift"}, "q", awesome.quit),
+         shift:
+            j: -> awful.client.swap.byidx(1)
+            k: -> awful.client.swap.byidx(-1)
+            h: -> awful.tag.incnmaster(1)
+            l: -> awful.tag.incnmaster(-1)
+            space: -> awful.layout.inc(awful.layout.layouts,-1, 1)
 
-      key({modkey, "Control"}, "n", awful.client.restore),
+         ctrl:
+            j: -> awful.screen.focus_relative(1)
+            k: -> awful.screen.focus_relative(-1)
+            h: -> awful.tag.incncol(1)
+            l: -> awful.tag.incncol(-1)
+            r: awesome.restart
+            shift: q: awesome.quit
+            n: awful.client.restore
 
-      -- Menubar
-      key({ modkey }, "p", -> menubar.show!)
-   }
-
-clientkeys = do
-   :key = awful
-   unpackJoin {
-      key({modkey}, "q", (c)-> c\kill!),
-      key({modkey, "Control"}, "space",  awful.client.floating.toggle),
-      key({modkey, "Control"}, "Return", (c)-> c\swap(awful.client.getmaster!)),
-      key({modkey}, "o", awful.client.movetoscreen),
-      key({modkey}, "t", (c)-> c.ontop = not c.ontop),
-      key({modkey}, "n", (c)-> c.minimized = true),
-      key({modkey}, "m", (c)->
+clientkeys = keyHandler
+   meta:
+      ctrl:
+         space:  awful.client.floating.toggle
+         "Return": (c)-> c\swap(awful.client.getmaster!)
+      q: (c)-> c\kill!
+      o: awful.client.movetoscreen
+      t:(c)-> c.ontop = not c.ontop
+      n:(c)-> c.minimized = true
+      m: (c)->
          c.maximized_horizontal = not c.maximized_horizontal
-         c.maximized_vertical = not c.maximized_vertical)
-   }
+         c.maximized_vertical = not c.maximized_vertical
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 9
-   globalkeys = do
-      :key = awful
-      unpackJoin {
-         globalkeys,
-         -- View tag only.
-         key({modkey}, "#" .. i + 9, ->
-            screen = mouse.screen
-            tag = awful.tag.gettags(screen)[i]
-            awful.tag.viewonly(tag)),
-         -- Toggle tag.
-         key({modkey, "Control"}, "#" .. i + 9, ->
-            screen = mouse.screen
-            tag = awful.tag.gettags(screen)[i]
-            awful.tag.viewtoggle(tag)  if tag),
-         -- Move client to tag.
-         key({modkey, "Shift"}, "#" .. i + 9, ->
-            if client.focus
-               tag = awful.tag.gettags(client.focus.screen)[i]
-               awful.client.movetotag(tag)  if tag),
-         -- Toggle tag.
-         key({modkey, "Control", "Shift"}, "#" .. i + 9, ->
-            if client.focus
-               tag = awful.tag.gettags(client.focus.screen)[i]
-               awful.client.toggletag(tag)  if tag)
-      }
+   globalkeys = awful.util.table.join globalkeys,
+      keyHandler
+         meta:
+            -- View tag only
+            ['#'..i+9]: ->
+               screen = mouse.screen
+               tag = awful.tag.gettags(screen)[i]
+               awful.tag.viewonly(tag)
+            -- Move client to tag
+            shift: ['#'..i+9]: ->
+               if client.focus
+                  tag = awful.tag.gettags(client.focus.screen)[i]
+                  awful.client.movetotag(tag)  if tag
+            -- Toggle tag
+            ctrl:
+               ['#'..i+9]: ->
+                  screen = mouse.screen
+                  tag = awful.tag.gettags(screen)[i]
+                  awful.tag.viewtoggle(tag)  if tag
+               shift: ['#'..i+9]: ->
+                     if client.focus
+                        tag = awful.tag.gettags(client.focus.screen)[i]
+                        awful.client.toggletag(tag)  if tag
 
 -- Set keys
 root.keys(globalkeys)

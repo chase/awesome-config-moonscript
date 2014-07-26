@@ -11,7 +11,7 @@ mouse =
       up: 4
       down: 5
 
-mouseHandler = (value) ->
-   return mapHandler(value, mouse, awful.button)
+mouseHandler = (value, implicitUp) ->
+   return mapHandler(value, mouse, awful.button, implicitUp)
 
 return mouseHandler
