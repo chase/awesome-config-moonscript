@@ -36,7 +36,7 @@ do
       in_error = false
 
 -- {{{ Variable definitions
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
 terminal = "urxvt"
 editor = "gvim"
@@ -197,8 +197,7 @@ globalkeys = do
       key({}, "XF86AudioMute", -> launch("amixer set Master toggle", false)),
       -- Media keys
       key({}, "XF86AudioPrev", -> launch("playerctl previous", false)),
-      key({}, "XF86AudioPlay", -> launch("playerctl play", false)),
-      key({}, "XF86AudioStop", -> launch("playerctl pause", false)),
+      key({}, "XF86AudioPlay", -> launch("playerctl play-pause", false)),
       key({}, "XF86AudioNext", -> launch("playerctl next", false)),
       -- Layout manipulation
       key({modkey, "Shift"}, "j", -> awful.client.swap.byidx(1)),
@@ -302,6 +301,10 @@ awful.rules.rules = {
          raise: true
          keys: clientkeys
          buttons: clientbuttons
+   }
+   {
+      rule: class: "Oblogout"
+      properties: fullscreen: true
    }
    {
       --Without compositing, LINE leaves black boxes on top
