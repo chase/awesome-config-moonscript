@@ -89,7 +89,7 @@ mytextclock = awful.widget.textclock!
 mywibox = {}
 mypromptbox = {}
 mylayoutbox = {}
-mytaglist = {
+mytaglist =
    buttons: do
       :tag = awful
       mouseHandler
@@ -101,8 +101,8 @@ mytaglist = {
          meta:
             left: client.movetotag
             right: client.toggletag
-}
 
+clientsmenu = nil
 mytasklist = {
    buttons: mouseHandler
       left: (c)->
@@ -114,11 +114,11 @@ mytasklist = {
             client.focus = c
             c\raise!
       right: ->
-         if not instance
-            instance = awful.menu.clients(theme: width: 250)
+         if not clientsmenu
+            clientsmenu = awful.menu.clients(theme: width: 250)
          else
-            instance\hide!
-            instance = nil
+            clientsmenu\hide!
+            clientsmenu = nil
       scroll:
          up: ->
             awful.client.focus.byidx(1)
@@ -135,13 +135,13 @@ for s = 1, screen.count!
    -- We need one layoutbox per screen.
    mylayoutbox[s] = awful.widget.layoutbox(s)
    mylayoutbox[s]\buttons do
-      :layout = awful
+      :layouts, :inc = awful.layout
       mouseHandler
-         left: -> layout:inc(1)
-         right: -> layout:inc(-1)
+         left: -> inc(layouts, 1, 1)
+         right: -> inc(layouts, -1, 1)
          scroll:
-            up: -> layout:inc(1)
-            down: -> layout:inc(-1)
+            up: -> inc(layouts, 1, 1)
+            down: -> inc(layouts, -1, 1)
    -- Create a taglist widget
    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
