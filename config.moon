@@ -249,27 +249,29 @@ clientkeys = keyHandler
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
+numpad = {"KP_End", "KP_Down", "KP_Next", "KP_Left", "KP_Begin", "KP_Right", "KP_Home", "KP_Up", "KP_Prior"}
+
 for i = 1, 9
    globalkeys = awful.util.table.join globalkeys,
       keyHandler
          meta:
             -- View tag only
-            ['#'..i+9]: ->
+            [numpad[i]]: ->
                screen = mouse.screen
                tag = awful.tag.gettags(screen)[i]
                awful.tag.viewonly(tag)
             -- Move client to tag
-            shift: ['#'..i+9]: ->
+            shift: [numpad[i]]: ->
                if client.focus
                   tag = awful.tag.gettags(client.focus.screen)[i]
                   awful.client.movetotag(tag)  if tag
             -- Toggle tag
             ctrl:
-               ['#'..i+9]: ->
+               [numpad[i]]: ->
                   screen = mouse.screen
                   tag = awful.tag.gettags(screen)[i]
                   awful.tag.viewtoggle(tag)  if tag
-               shift: ['#'..i+9]: ->
+               shift: [numpad[i]]: ->
                      if client.focus
                         tag = awful.tag.gettags(client.focus.screen)[i]
                         awful.client.toggletag(tag)  if tag
