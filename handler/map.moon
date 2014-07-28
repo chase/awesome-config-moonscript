@@ -1,4 +1,4 @@
-translateHandler = require 'translateHandler'
+translateHandler = require 'handler.translate'
 
 mapHandler = (value, transform, mapFunction, implicitUp) ->
    result = {}

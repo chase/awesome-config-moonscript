@@ -6,8 +6,8 @@ wibox = require "wibox"
 beautiful = require "beautiful"
 naughty = require "naughty"
 menubar = require "menubar"
-mouseHandler = require "mouseHandler"
-keyHandler = require "keyHandler"
+mouseHandler = require "handler.mouse"
+keyHandler = require "handler.key"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")

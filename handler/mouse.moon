@@ -1,4 +1,4 @@
-mapHandler = require 'mapHandler'
+mapHandler = require 'handler.map'
 awful = require 'awful'
 
 mouse =
