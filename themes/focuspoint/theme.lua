@@ -33,11 +33,6 @@ theme.border_focus  = "#6F6F6F"
 theme.border_marked = "#CC9393"
 -- }}}
 
--- {{{ Titlebars
-theme.titlebar_bg_focus  = "#3F3F3F"
-theme.titlebar_bg_normal = "#3F3F3F"
--- }}}
-
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:
@@ -46,6 +41,7 @@ theme.titlebar_bg_normal = "#3F3F3F"
 -- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
 -- Example:
 --theme.taglist_bg_focus = "#CC9393"
+theme.tasklist_disable_icon = true
 -- }}}
 
 -- {{{ Widgets
@@ -96,11 +92,6 @@ theme.layout_max        = curdir.."layouts/max.png"
 theme.layout_fullscreen = curdir.."layouts/fullscreen.png"
 theme.layout_magnifier  = curdir.."layouts/magnifier.png"
 theme.layout_floating   = curdir.."layouts/floating.png"
--- }}}
-
--- {{{ Titlebar
--- Titlebars are for the weak
--- }}}
 -- }}}
 
 return theme
