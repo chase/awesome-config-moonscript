@@ -8,6 +8,7 @@ naughty = require "naughty"
 menubar = require "menubar"
 mouseHandler = require "handler.mouse"
 keyHandler = require "handler.key"
+battery = require "battery"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
@@ -160,6 +161,8 @@ for s = 1, screen.count!
    right_layout = wibox.layout.fixed.horizontal!
    right_layout\add(wibox.widget.systray!)
    right_layout\add(mytextclock)
+   if mybattery = battery!
+      right_layout\add(mybattery)
    right_layout\add(mylayoutbox[s])
 
    -- Now bring it all together (with the tasklist in the middle)
