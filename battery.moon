@@ -29,6 +29,9 @@ batteryWidget = (options={}) ->
    return nil  if readBattery('present') != "1"
 
    timerHandler = ->
+      -- Upon resume, sometimes the battery isn't initialized
+      return  if readBattery('present') != "1"
+
       current = readBattery('energy_now') or readBattery('charge_now')
       full = readBattery('energy_full') or readBattery('charge_full')
       percentage = current / full * 100
