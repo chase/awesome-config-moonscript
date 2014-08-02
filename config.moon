@@ -176,6 +176,8 @@ for s = 1, screen.count!
 
 -- {{{ Mouse bindings
    root.buttons mouseHandler
+      swipeRight: awful.tag.viewnext
+      swipeLeft: awful.tag.viewprev
       scroll:
          up: awful.tag.viewnext
          down: awful.tag.viewprev
@@ -284,6 +286,8 @@ root.keys(globalkeys)
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
 clientbuttons = mouseHandler
+   swipeRight: (c)-> awful.tag.viewnext(c.screen)
+   swipeLeft: (c)-> awful.tag.viewprev(c.screen)
    left: (c)->
       client.focus = c
       c\raise!

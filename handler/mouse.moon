@@ -10,6 +10,10 @@ mouse =
    scroll:
       up: 4
       down: 5
+   swipeUp: 8
+   swipeDown: 9
+   swipeLeft: 10
+   swipeRight: 11
 
 mouseHandler = (value, implicitUp) ->
    return mapHandler(value, mouse, awful.button, implicitUp)
