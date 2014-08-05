@@ -187,21 +187,24 @@ for s = 1, screen.count!
 globalkeys = do
    :tag, util:spawn:launch = awful
    keyHandler
-       -- Volume keys
-      "XF86AudioRaiseVolume": -> launch("amixer set Master 9%+", false)
-      "XF86AudioLowerVolume": -> launch("amixer set Master 9%-", false)
-      "XF86AudioMute": -> launch("amixer set Master toggle", false)
+      -- Display keys
+      "XF86MonBrightnessUp": -> launch "xbacklight -inc 7", false
+      "XF86MonBrightnessDown": -> launch "xbacklight -dec 7", false
+      -- Volume keys
+      "XF86AudioRaiseVolume": -> launch "amixer set Master 9%+", false
+      "XF86AudioLowerVolume": -> launch "amixer set Master 9%-", false
+      "XF86AudioMute": -> launch "amixer set Master toggle", false
       -- Media keys
-      "XF86AudioPrev": -> launch("playerctl previous", false)
-      "XF86AudioPlay": -> launch("playerctl play-pause", false)
-      "XF86AudioNext": -> launch("playerctl next", false)
+      "XF86AudioPrev": -> launch "playerctl previous", false
+      "XF86AudioPlay": -> launch "playerctl play-pause", false
+      "XF86AudioNext": -> launch "playerctl next", false
       meta:
          -- Standard programs
-         f: -> launch("thunar")
-         e: -> launch(editor)
-         w: -> launch("chromium")
-         r: -> launch("xboomx", false)
-         "Return": -> launch(terminal)
+         f: -> launch "thunar"
+         e: -> launch editor
+         w: -> launch "chromium"
+         r: -> launch "xboomx", false
+         "Return": -> launch terminal
          -- Jump between tags
          "Left": tag.viewprev
          "Right": tag.viewnext
