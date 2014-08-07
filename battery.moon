@@ -12,10 +12,10 @@ batteryWidget = (options={}) ->
       notify: "on"
       normal: color: "#43AB59"
       low:
-         percent: .25
+         percent: 25
          color: "#FFC66D"
       critical:
-         percent: .1
+         percent: 10
          color: "#CD5C5C"
    }
 
