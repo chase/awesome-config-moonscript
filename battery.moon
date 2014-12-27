@@ -26,10 +26,13 @@ batteryWidget = (options={}) ->
    opt[key] = value for key, value in pairs options
    textbox = wibox.widget.textbox!
 
-   return nil  if readBattery('present') != "1"
+   ok, val = pcall(readBattery,'present')
+   return nil  if not ok or val != "1"
 
    timerHandler = ->
       current = readBattery('energy_now') or readBattery('charge_now')
+      unless current
+         return textbox\set_markup "<span color='#{opt.low.color}'>...</span>"
       full = readBattery('energy_full') or readBattery('charge_full')
       percentage = current / full * 100
       batteryPercent = string.format(" %d%% ", percentage)

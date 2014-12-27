@@ -23,8 +23,6 @@ shrinkNotifications = (args)->
    return args
 
 naughty.config.presets.low.callback = interceptSpotify
-naughty.config.notify_callback = shrinkNotifications
-
 
 do
    in_error = false
@@ -37,6 +35,10 @@ do
          text:err
       }
       in_error = false
+
+util:spawn:launch = awful
+launch("compton -cCzG -t-3 -l-5 -r4 --config /dev/null --backend xrender --unredir-if-possible --shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c || bounding_shaped'", false)
+launch("xflux -z 43207", false)
 
 -- {{{ Variable definitions
 beautiful.init(curdir.."themes/focuspoint/theme.lua")
