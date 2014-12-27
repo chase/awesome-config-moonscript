@@ -12,10 +12,10 @@ batteryWidget = (options={}) ->
       notify: "on"
       normal: color: "#43AB59"
       low:
-         percent: .25
+         percent: 25
          color: "#FFC66D"
       critical:
-         percent: .1
+         percent: 10
          color: "#CD5C5C"
    }
 
@@ -30,6 +30,9 @@ batteryWidget = (options={}) ->
    return nil  if not ok or val != "1"
 
    timerHandler = ->
+      -- Upon resume, sometimes the battery isn't initialized
+      return  if readBattery('present') != "1"
+
       current = readBattery('energy_now') or readBattery('charge_now')
       unless current
          return textbox\set_markup "<span color='#{opt.low.color}'>...</span>"
