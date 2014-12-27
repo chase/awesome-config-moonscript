@@ -36,9 +36,9 @@ do
       }
       in_error = false
 
-util:spawn:launch = awful
-launch("compton -cCzG -t-3 -l-5 -r4 --config /dev/null --backend xrender --unredir-if-possible --shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c || bounding_shaped'", false)
-launch("xflux -z 43207", false)
+util:spawn_with_shell:shell = awful
+shell("sleep 2s && compton -cCzG -t-3 -l-5 -r4 --config /dev/null --backend xrender --unredir-if-possible --shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c || bounding_shaped'", false)
+shell("xflux -z 43207", false)
 
 -- {{{ Variable definitions
 beautiful.init(curdir.."themes/focuspoint/theme.lua")
