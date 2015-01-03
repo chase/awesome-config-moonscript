@@ -59,17 +59,10 @@ modkey = "Mod4"
 
 with awful.layout
    .layouts = {
-      .suit.tile.left,
-      .suit.tile,
       .suit.tile.bottom,
-      .suit.tile.top,
-      .suit.fair,
       .suit.fair.horizontal,
-      .suit.spiral,
       .suit.spiral.dwindle,
-      .suit.max,
       .suit.max.fullscreen,
-      .suit.magnifier,
       .suit.floating
    }
 -- }}}
