@@ -67,6 +67,19 @@ with awful.layout
    }
 -- }}}
 
+-- Window switcher
+switcher = (all) ->
+   now = if all then "-now" else "-dnow"
+   shell "killall simpleswitcher;",
+      "simpleswitcher",
+      now,
+      "-bw '#{beautiful.border_width}'",
+      "-bc '#{beautiful.border_focus}'",
+      "-hlbg '#{beautiful.bg_focus}'",
+      "-hlfg '#{beautiful.fg_focus}'",
+      "-bg '#{beautiful.bg_normal}'",
+      "-fg '#{beautiful.fg_normal}'"
+
 -- {{{ Wallpaper
 if beautiful.wallpaper
    for s = 1, screen.count!
@@ -222,9 +235,8 @@ globalkeys = do
             awful.client.focus.byidx(-1)
             client.focus\raise!  if client.focus
          u: awful.client.urgent.jumpto
-         "Tab": ->
-            awful.client.focus.history.previous!
-            client.focus\raise!  if client.focus
+         ";": -> switcher(true)
+         "'": -> switcher(false)
          l: -> awful.tag.incmwfact(0.05)
          h: -> awful.tag.incmwfact(-0.05)
          space: -> awful.layout.inc(awful.layout.layouts, 1, 1)
@@ -342,6 +354,12 @@ awful.rules.rules = {
 
          --Without argb compositing, LINE leaves black boxes on top
          c\kill!  if c.name == nil
+   }
+   {
+      rule: class: "simpleswitcher"
+      properties:
+         raise: true
+         focus: true
    }
    {
       rule: instance: "Line.exe", name: "emoji"
