@@ -249,6 +249,7 @@ globalkeys = do
             h: -> awful.tag.incnmaster(1)
             l: -> awful.tag.incnmaster(-1)
             space: -> awful.layout.inc(awful.layout.layouts,-1, 1)
+            n: awful.client.restore
 
          ctrl:
             j: -> awful.screen.focus_relative(1)
@@ -257,7 +258,6 @@ globalkeys = do
             l: -> awful.tag.incncol(-1)
             r: awesome.restart
             shift: q: awesome.quit
-            n: awful.client.restore
 
 clientkeys = keyHandler
    meta:
