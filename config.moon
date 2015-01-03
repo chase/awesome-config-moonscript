@@ -9,6 +9,7 @@ menubar = require "menubar"
 mouseHandler = require "handler.mouse"
 keyHandler = require "handler.key"
 battery = require "battery"
+taglist = require "taglist"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
@@ -75,9 +76,12 @@ if beautiful.wallpaper
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
+spotifyIcon = "<span rise='1000'>6</span> <span font='FontAwesome 12' color='#84bd00'>  </span>"
+lineIcon = "7 <span font='FontAwesome 10'>  </span>"
+mytags = awful.tag({ 1, 2, 3, 4, 5, spotifyIcon, lineIcon }, s, awful.layout.layouts[1])
 for s = 1, screen.count!
-   -- Each screen has its own tag table.
-   tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, awful.layout.layouts[1])
+   -- Duplicate tags for each screen
+   tags[s] = mytags
 -- }}}
 
 -- Menubar configuration
@@ -146,7 +150,7 @@ for s = 1, screen.count!
             up: -> inc(layouts, 1, 1)
             down: -> inc(layouts, -1, 1)
    -- Create a taglist widget
-   mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
+   mytaglist[s] = taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
    -- Create a tasklist widget
    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
@@ -313,17 +317,30 @@ awful.rules.rules = {
          buttons: clientbuttons
    }
    {
+      -- Startup in Spotify tag
+      rule: class: "Spotify"
+      properties: tag: mytags[6]
+   }
+   {
       rule: class: "Oblogout"
       properties: fullscreen: true
    }
    {
-      --Without compositing, LINE leaves black boxes on top
       rule: instance: "Line.exe"
       except: name: "emoji"
       properties:
-         floating: false
          size_hints_honor: false
+         floating: false
+         maximized: true
+         tag: mytags[7] -- Startup in LINE tag
       callback: (c)->
+         --Keep chat from jumping
+         g=c\geometry!
+         g.x -= 1
+         g.y -= 1
+         c\connect_signal("focus", (cc)-> cc\geometry(g))
+
+         --Without argb compositing, LINE leaves black boxes on top
          c\kill!  if c.name == nil
    }
    {
@@ -332,6 +349,7 @@ awful.rules.rules = {
          floating: true
          raise: true
          focus: true
+         tag: mytags[7] -- Startup in LINE tag
       callback: (c)->
          g=c\geometry!
          mouse.coords({
