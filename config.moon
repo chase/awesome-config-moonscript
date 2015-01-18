@@ -52,7 +52,7 @@ shell "killall xflux;",
 beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
 terminal = "urxvt"
-editor = "gvim"
+editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
 
 modkey = "Mod4"
@@ -220,7 +220,7 @@ globalkeys = do
       meta:
          -- Standard programs
          f: -> launch "thunar"
-         e: -> launch editor
+         e: -> launch editor_cmd
          w: -> launch "chromium"
          r: -> launch "xboomx", false
          "Return": -> launch terminal
