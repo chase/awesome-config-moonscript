@@ -212,7 +212,7 @@ globalkeys = do
       -- Volume keys
       "XF86AudioRaiseVolume": -> launch "amixer set Master 9%+", false
       "XF86AudioLowerVolume": -> launch "amixer set Master 9%-", false
-      "XF86AudioMute": -> launch "amixer set Master toggle", false
+      "XF86AudioMute": -> launch "amixer -D pulse set Master togglemute", false
       -- Media keys
       "XF86AudioPrev": -> launch "playerctl previous", false
       "XF86AudioPlay": -> launch "playerctl play-pause", false
@@ -261,8 +261,8 @@ globalkeys = do
 
 clientkeys = keyHandler
    meta:
-      ctrl:
-         space:  awful.client.floating.toggle
+      shift:
+         f:  awful.client.floating.toggle
          "Return": (c)-> c\swap(awful.client.getmaster!)
       q: (c)-> c\kill!
       o: awful.client.movetoscreen
