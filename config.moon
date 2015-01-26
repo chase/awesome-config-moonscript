@@ -44,9 +44,6 @@ shell "killall compton; sleep 2s && compton",
    "--config /dev/null",
    "--backend xrender --unredir-if-possible",
    "--shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c || bounding_shaped'"
--- Flux
-shell "killall xflux;",
-   "xflux -z 43207"
 
 -- {{{ Variable definitions
 beautiful.init(curdir.."themes/focuspoint/theme.lua")
