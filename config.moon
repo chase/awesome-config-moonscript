@@ -10,6 +10,7 @@ mouseHandler = require "handler.mouse"
 keyHandler = require "handler.key"
 battery = require "battery"
 taglist = require "taglist"
+lainLayout = require "lain.layout"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
@@ -57,11 +58,16 @@ editor_cmd = terminal .. " -e " .. editor
 
 modkey = "Mod4"
 
+with lainLayout.centerfair
+   .nmaster = 3
+   .ncol = 1
+
 with awful.layout
    .layouts = {
-      .suit.tile.bottom,
-      .suit.fair.horizontal,
-      .suit.spiral.dwindle,
+      lainLayout.centerwork
+      lainLayout.centerfair
+      lainLayout.uselessfair.horizontal,
+      lainLayout.uselesspiral.dwindle,
       .suit.max.fullscreen,
       .suit.floating
    }
@@ -202,6 +208,10 @@ for s = 1, screen.count!
          down: awful.tag.viewprev
 -- }}}
 
+focusByDirection = (dir) ->
+   awful.client.focus.bydirection(dir)
+   client.focus\raise!  if client.focus
+
 -- {{{ Key bindings
 globalkeys = do
    :tag, util:spawn:launch = awful
@@ -228,17 +238,13 @@ globalkeys = do
          "Left": tag.viewprev
          "Right": tag.viewnext
          -- Layout manipulation
-         j: ->
-            awful.client.focus.byidx(1)
-            client.focus\raise!  if client.focus
-         k: ->
-            awful.client.focus.byidx(-1)
-            client.focus\raise!  if client.focus
+         j: -> focusByDirection("down")
+         k: -> focusByDirection("up")
+         h: -> focusByDirection("left")
+         l: -> focusByDirection("right")
          u: awful.client.urgent.jumpto
-         ";": -> switcher(true)
-         "'": -> switcher(false)
-         l: -> awful.tag.incmwfact(0.05)
-         h: -> awful.tag.incmwfact(-0.05)
+         "Tab": -> switcher(true)
+         ";": -> switcher(false)
          space: -> awful.layout.inc(awful.layout.layouts, 1, 1)
          -- Menubar
          p: -> menubar.show!
@@ -252,8 +258,8 @@ globalkeys = do
             n: awful.client.restore
 
          ctrl:
-            j: -> awful.screen.focus_relative(1)
-            k: -> awful.screen.focus_relative(-1)
+            j: -> awful.tag.incmwfact(0.05)
+            k: -> awful.tag.incmwfact(-0.05)
             h: -> awful.tag.incncol(1)
             l: -> awful.tag.incncol(-1)
             r: awesome.restart
@@ -275,7 +281,7 @@ clientkeys = keyHandler
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, 9
+for i = 1, 7
    globalkeys = awful.util.table.join globalkeys,
       keyHandler
          meta:
