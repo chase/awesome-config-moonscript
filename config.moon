@@ -45,9 +45,6 @@ shell "killall compton; sleep 2s && compton",
    "--config /dev/null",
    "--backend glx --xrender-sync-fence --unredir-if-possible",
    "--shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c || bounding_shaped'"
--- Flux
-shell "killall xflux;",
-   "xflux -z 43207"
 
 -- {{{ Variable definitions
 beautiful.init(curdir.."themes/focuspoint/theme.lua")
@@ -64,9 +61,9 @@ with lainLayout.centerfair
 
 with awful.layout
    .layouts = {
+      lainLayout.uselessfair.horizontal,
       lainLayout.centerwork
       lainLayout.centerfair
-      lainLayout.uselessfair.horizontal,
       lainLayout.uselesspiral.dwindle,
       .suit.max.fullscreen,
       .suit.floating
