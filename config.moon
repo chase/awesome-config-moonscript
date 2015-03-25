@@ -10,6 +10,7 @@ mouseHandler = require "handler.mouse"
 keyHandler = require "handler.key"
 battery = require "battery"
 taglist = require "taglist"
+lainLayout = require "lain.layout"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
@@ -42,23 +43,28 @@ shell = (...)-> awful.util.spawn_with_shell(table.concat({...}," "), false)
 shell "killall compton; sleep 2s && compton",
    "-cCzG -t-3 -l-5 -r4",
    "--config /dev/null",
-   "--backend xrender --unredir-if-possible",
+   "--backend glx --xrender-sync-fence --unredir-if-possible",
    "--shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c || bounding_shaped'"
 
 -- {{{ Variable definitions
 beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
-terminal = "urxvt"
+terminal = "st"
 editor = "vim"
-editor_cmd = terminal .. " -e " .. editor
+editor_cmd = "st-vim"
 
 modkey = "Mod4"
 
+with lainLayout.centerfair
+   .nmaster = 3
+   .ncol = 1
+
 with awful.layout
    .layouts = {
-      .suit.tile.bottom,
-      .suit.fair.horizontal,
-      .suit.spiral.dwindle,
+      lainLayout.uselessfair.horizontal,
+      lainLayout.centerwork
+      lainLayout.centerfair
+      lainLayout.uselesspiral.dwindle,
       .suit.max.fullscreen,
       .suit.floating
    }
@@ -199,6 +205,10 @@ for s = 1, screen.count!
          down: awful.tag.viewprev
 -- }}}
 
+focusByDirection = (dir) ->
+   awful.client.focus.bydirection(dir)
+   client.focus\raise!  if client.focus
+
 -- {{{ Key bindings
 globalkeys = do
    :tag, util:spawn:launch = awful
@@ -209,7 +219,7 @@ globalkeys = do
       -- Volume keys
       "XF86AudioRaiseVolume": -> launch "amixer set Master 9%+", false
       "XF86AudioLowerVolume": -> launch "amixer set Master 9%-", false
-      "XF86AudioMute": -> launch "amixer -D pulse set Master togglemute", false
+      "XF86AudioMute": -> launch "amixer set Master toggle", false
       -- Media keys
       "XF86AudioPrev": -> launch "playerctl previous", false
       "XF86AudioPlay": -> launch "playerctl play-pause", false
@@ -225,17 +235,13 @@ globalkeys = do
          "Left": tag.viewprev
          "Right": tag.viewnext
          -- Layout manipulation
-         j: ->
-            awful.client.focus.byidx(1)
-            client.focus\raise!  if client.focus
-         k: ->
-            awful.client.focus.byidx(-1)
-            client.focus\raise!  if client.focus
+         j: -> focusByDirection("down")
+         k: -> focusByDirection("up")
+         h: -> focusByDirection("left")
+         l: -> focusByDirection("right")
          u: awful.client.urgent.jumpto
-         ";": -> switcher(true)
-         "'": -> switcher(false)
-         l: -> awful.tag.incmwfact(0.05)
-         h: -> awful.tag.incmwfact(-0.05)
+         "Tab": -> switcher(true)
+         ";": -> switcher(false)
          space: -> awful.layout.inc(awful.layout.layouts, 1, 1)
          -- Menubar
          p: -> menubar.show!
@@ -249,8 +255,8 @@ globalkeys = do
             n: awful.client.restore
 
          ctrl:
-            j: -> awful.screen.focus_relative(1)
-            k: -> awful.screen.focus_relative(-1)
+            j: -> awful.tag.incmwfact(0.05)
+            k: -> awful.tag.incmwfact(-0.05)
             h: -> awful.tag.incncol(1)
             l: -> awful.tag.incncol(-1)
             r: awesome.restart
@@ -258,8 +264,8 @@ globalkeys = do
 
 clientkeys = keyHandler
    meta:
-      shift:
-         f:  awful.client.floating.toggle
+      ctrl:
+         space:  awful.client.floating.toggle
          "Return": (c)-> c\swap(awful.client.getmaster!)
       q: (c)-> c\kill!
       o: awful.client.movetoscreen
@@ -272,7 +278,7 @@ clientkeys = keyHandler
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, 9
+for i = 1, 7
    globalkeys = awful.util.table.join globalkeys,
       keyHandler
          meta:

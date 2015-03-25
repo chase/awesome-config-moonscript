@@ -92,6 +92,12 @@ theme.layout_max        = curdir.."layouts/max.png"
 theme.layout_fullscreen = curdir.."layouts/fullscreen.png"
 theme.layout_magnifier  = curdir.."layouts/magnifier.png"
 theme.layout_floating   = curdir.."layouts/floating.png"
+theme.layout_centerfair = curdir.."layouts/centerfair.png"
+theme.layout_centerwork = curdir.."layouts/centerwork.png"
+theme.layout_uselessfairh = curdir.."layouts/fairh.png"
+theme.layout_uselessdwindle = curdir.."layouts/spiral.png"
+
+theme.useless_gap_width = 10
 -- }}}
 
 return theme
