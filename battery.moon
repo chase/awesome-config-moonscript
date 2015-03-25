@@ -3,6 +3,8 @@ wibox = require "wibox"
 
 readFirstLine = (filename) ->
    -- io.lines is an iterator, first call is the first line
+   ok, val = pcall(io.lines, filename)
+   return nil  if not ok
    return io.lines(filename)!
 
 batteryWidget = (options={}) ->
