@@ -57,14 +57,14 @@ modkey = "Mod4"
 
 with lainLayout.centerfair
    .nmaster = 3
-   .ncol = 1
+   .ncol = 2
 
 with awful.layout
    .layouts = {
+      lainLayout.uselesspiral.dwindle,
       lainLayout.uselessfair.horizontal,
       lainLayout.centerwork
       lainLayout.centerfair
-      lainLayout.uselesspiral.dwindle,
       .suit.max.fullscreen,
       .suit.floating
    }
