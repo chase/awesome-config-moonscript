@@ -15,16 +15,12 @@ lainLayout = require "lain.layout"
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
 
-interceptSpotify = (data, appname, replaces_id, icon, title, text, actions, hints, expire)->
-   if appname == "Spotify"
+interceptMusicNotification = (data, appname, replaces_id, icon, title, text, actions, hints, expire)->
+   if appname == "Spotify" or appname == "NuvolaPlayer"
       return false
    return true
 
-shrinkNotifications = (args)->
-   args.icon_size = 48
-   return args
-
-naughty.config.presets.low.callback = interceptSpotify
+naughty.config.presets.low.callback = interceptMusicNotification
 
 do
    in_error = false
