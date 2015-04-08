@@ -43,7 +43,7 @@ beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
 terminal = "st"
 editor = "vim"
-editor_cmd = "st-vim"
+editor_cmd = "cd ~/Development && st-vim"
 
 modkey = "Mod4"
 
@@ -219,7 +219,7 @@ globalkeys = do
       meta:
          -- Standard programs
          f: -> launch "pantheon-files"
-         e: -> launch editor_cmd
+         e: -> shell editor_cmd
          w: -> launch "chromium"
          r: -> launch "xboomx", false
          "Return": -> launch terminal
