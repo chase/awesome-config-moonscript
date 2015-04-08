@@ -218,7 +218,7 @@ globalkeys = do
       "XF86AudioNext": -> launch "playerctl next", false
       meta:
          -- Standard programs
-         f: -> launch "thunar"
+         f: -> launch "pantheon-files"
          e: -> launch editor_cmd
          w: -> launch "chromium"
          r: -> launch "xboomx", false
