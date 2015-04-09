@@ -192,9 +192,6 @@ for s = 1, screen.count!
    root.buttons mouseHandler
       swipeRight: awful.tag.viewnext
       swipeLeft: awful.tag.viewprev
-      scroll:
-         up: awful.tag.viewnext
-         down: awful.tag.viewprev
 -- }}}
 
 focusByDirection = (dir) ->
