@@ -15,16 +15,8 @@ lainLayout = require "lain.layout"
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
 
-interceptSpotify = (data, appname, replaces_id, icon, title, text, actions, hints, expire)->
-   if appname == "Spotify"
-      return false
-   return true
-
-shrinkNotifications = (args)->
-   args.icon_size = 48
-   return args
-
-naughty.config.presets.low.callback = interceptSpotify
+naughty.config.defaults.height = 24
+naughty.config.defaults.width = 200
 
 do
    in_error = false
@@ -51,20 +43,20 @@ beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
 terminal = "urxvt"
 editor = "vim"
-editor_cmd = "st-vim"
+editor_cmd = "cd ~/Development && st-vim"
 
 modkey = "Mod4"
 
 with lainLayout.centerfair
    .nmaster = 3
-   .ncol = 1
+   .ncol = 2
 
 with awful.layout
    .layouts = {
+      lainLayout.uselesspiral.dwindle,
       lainLayout.uselessfair.horizontal,
       lainLayout.centerwork
       lainLayout.centerfair
-      lainLayout.uselesspiral.dwindle,
       .suit.max.fullscreen,
       .suit.floating
    }
@@ -200,9 +192,6 @@ for s = 1, screen.count!
    root.buttons mouseHandler
       swipeRight: awful.tag.viewnext
       swipeLeft: awful.tag.viewprev
-      scroll:
-         up: awful.tag.viewnext
-         down: awful.tag.viewprev
 -- }}}
 
 focusByDirection = (dir) ->
@@ -226,8 +215,8 @@ globalkeys = do
       "XF86AudioNext": -> launch "playerctl next", false
       meta:
          -- Standard programs
-         f: -> launch "thunar"
-         e: -> launch editor_cmd
+         f: -> launch "pantheon-files"
+         e: -> shell editor_cmd
          w: -> launch "chromium"
          r: -> launch "xboomx", false
          "Return": -> launch terminal
