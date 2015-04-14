@@ -49,7 +49,7 @@ shell "killall compton; sleep 2s && compton",
 -- {{{ Variable definitions
 beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
-terminal = "st"
+terminal = "urxvt"
 editor = "vim"
 editor_cmd = "st-vim"
 
