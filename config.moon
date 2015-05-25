@@ -11,6 +11,7 @@ keyHandler = require "handler.key"
 battery = require "battery"
 taglist = require "taglist"
 lainLayout = require "lain.layout"
+tzclock = require "tzclock"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
@@ -97,7 +98,8 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock!
+myclock = tzclock("EDT", -5)
+nswclock = tzclock("AEST", 10)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -173,9 +175,8 @@ for s = 1, screen.count!
    -- Widgets that are aligned to the right
    right_layout = wibox.layout.fixed.horizontal!
    right_layout\add(wibox.widget.systray!)
-   right_layout\add(mytextclock)
-   if mybattery = battery!
-      right_layout\add(mybattery)
+   right_layout\add(myclock)
+   right_layout\add(nswclock)
    right_layout\add(mylayoutbox[s])
 
    -- Now bring it all together (with the tasklist in the middle)
