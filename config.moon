@@ -41,9 +41,8 @@ shell "killall compton; sleep 2s && compton",
 -- {{{ Variable definitions
 beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
-terminal = "st"
-editor = "vim"
-editor_cmd = "cd ~/Development && st-vim"
+terminal = "urxvt"
+editor_cmd = "cd ~/Development && urxvt -e vim"
 
 modkey = "Mod4"
 
@@ -215,7 +214,7 @@ globalkeys = do
       "XF86AudioNext": -> launch "playerctl next", false
       meta:
          -- Standard programs
-         f: -> launch "pantheon-files"
+         f: -> launch "thunar"
          e: -> shell editor_cmd
          w: -> launch "chromium"
          r: -> launch "xboomx", false
@@ -330,43 +329,10 @@ awful.rules.rules = {
       properties: fullscreen: true
    }
    {
-      rule: instance: "Line.exe"
-      except: name: "emoji"
-      properties:
-         size_hints_honor: false
-         floating: false
-         maximized: true
-         tag: mytags[7] -- Startup in LINE tag
-      callback: (c)->
-         --Keep chat from jumping
-         g=c\geometry!
-         g.x -= 1
-         g.y -= 1
-         c\connect_signal("focus", (cc)-> cc\geometry(g))
-
-         --Without argb compositing, LINE leaves black boxes on top
-         c\kill!  if c.name == nil
-   }
-   {
       rule: class: "simpleswitcher"
       properties:
          raise: true
          focus: true
-   }
-   {
-      rule: instance: "Line.exe", name: "emoji"
-      properties:
-         floating: true
-         raise: true
-         focus: true
-         tag: mytags[7] -- Startup in LINE tag
-      callback: (c)->
-         g=c\geometry!
-         mouse.coords({
-            x:g.x+(g.width/2)
-            y:g.y+(g.height/2)
-         })
-         awful.client.setslave(c)
    }
 }
 
