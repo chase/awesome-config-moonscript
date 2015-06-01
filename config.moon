@@ -11,6 +11,7 @@ keyHandler = require "handler.key"
 battery = require "battery"
 taglist = require "taglist"
 lainLayout = require "lain.layout"
+tzclock = require "tzclock"
 
 unpackJoin = (tablesTable) -> awful.util.table.join(unpack(tablesTable))
 curdir = debug.getinfo(1, "S").source\sub(2)\match("(.*/)")
@@ -43,20 +44,21 @@ beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
 terminal = "urxvt"
 editor = "vim"
-editor_cmd = "cd ~/Development && st-vim"
+editor_cmd = "cd ~/Development && urxvt -e vim"
 
 modkey = "Mod4"
 
 with lainLayout.centerfair
-   .nmaster = 3
+   .nmaster = 1
    .ncol = 2
 
 with awful.layout
    .layouts = {
       lainLayout.uselesspiral.dwindle,
       lainLayout.uselessfair.horizontal,
-      lainLayout.centerwork
-      lainLayout.centerfair
+      lainLayout.uselessfair.vertical,
+      lainLayout.centerwork,
+      lainLayout.centerfair,
       .suit.max.fullscreen,
       .suit.floating
    }
@@ -73,7 +75,8 @@ switcher = (all) ->
       "-hlbg '#{beautiful.bg_focus}'",
       "-hlfg '#{beautiful.fg_focus}'",
       "-bg '#{beautiful.bg_normal}'",
-      "-fg '#{beautiful.fg_normal}'"
+      "-fg '#{beautiful.fg_normal}'",
+      "-font 'Input:pixelsize=14'"
 
 -- {{{ Wallpaper
 if beautiful.wallpaper
@@ -84,9 +87,9 @@ if beautiful.wallpaper
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
-spotifyIcon = "<span rise='1000'>6</span> <span font='FontAwesome 12' color='#84bd00'>  </span>"
-lineIcon = "7 <span font='FontAwesome 10'>  </span>"
-mytags = awful.tag({ 1, 2, 3, 4, 5, spotifyIcon, lineIcon }, s, awful.layout.layouts[1])
+musicIcon = "6 <span font='FontAwesome 10'>  </span>"
+chatIcon = "7 <span font='FontAwesome 10'>  </span>"
+mytags = awful.tag({ 1, 2, 3, 4, 5, musicIcon, chatIcon }, s, awful.layout.layouts[1])
 for s = 1, screen.count!
    -- Duplicate tags for each screen
    tags[s] = mytags
@@ -98,7 +101,8 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibox
 -- Create a textclock widget
-mytextclock = awful.widget.textclock!
+myclock = tzclock("EDT", -5)
+nswclock = tzclock("AEST", 9) -- Doesn't account for daylight time
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -174,7 +178,8 @@ for s = 1, screen.count!
    -- Widgets that are aligned to the right
    right_layout = wibox.layout.fixed.horizontal!
    right_layout\add(wibox.widget.systray!)
-   right_layout\add(mytextclock)
+   right_layout\add(myclock)
+   right_layout\add(nswclock)
    if mybattery = battery!
       right_layout\add(mybattery)
    right_layout\add(mylayoutbox[s])
@@ -215,7 +220,7 @@ globalkeys = do
       "XF86AudioNext": -> launch "playerctl next", false
       meta:
          -- Standard programs
-         f: -> launch "pantheon-files"
+         f: -> launch "thunar"
          e: -> shell editor_cmd
          w: -> launch "chromium"
          r: -> launch "xboomx", false
@@ -321,7 +326,12 @@ awful.rules.rules = {
          buttons: clientbuttons
    }
    {
-      -- Startup in Spotify tag
+      -- Start Slack in chat tag
+      rule: instance: "crx_cnjajkcaapiegeibkcdbomdebcjoklnl"
+      properties: tag: mytags[7]
+   }
+   {
+      -- Start Spotify in music tag
       rule: class: "Spotify"
       properties: tag: mytags[6]
    }
@@ -330,43 +340,10 @@ awful.rules.rules = {
       properties: fullscreen: true
    }
    {
-      rule: instance: "Line.exe"
-      except: name: "emoji"
-      properties:
-         size_hints_honor: false
-         floating: false
-         maximized: true
-         tag: mytags[7] -- Startup in LINE tag
-      callback: (c)->
-         --Keep chat from jumping
-         g=c\geometry!
-         g.x -= 1
-         g.y -= 1
-         c\connect_signal("focus", (cc)-> cc\geometry(g))
-
-         --Without argb compositing, LINE leaves black boxes on top
-         c\kill!  if c.name == nil
-   }
-   {
       rule: class: "simpleswitcher"
       properties:
          raise: true
          focus: true
-   }
-   {
-      rule: instance: "Line.exe", name: "emoji"
-      properties:
-         floating: true
-         raise: true
-         focus: true
-         tag: mytags[7] -- Startup in LINE tag
-      callback: (c)->
-         g=c\geometry!
-         mouse.coords({
-            x:g.x+(g.width/2)
-            y:g.y+(g.height/2)
-         })
-         awful.client.setslave(c)
    }
 }
 
