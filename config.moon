@@ -48,15 +48,16 @@ editor_cmd = "cd ~/Development && urxvt -e vim"
 modkey = "Mod4"
 
 with lainLayout.centerfair
-   .nmaster = 3
+   .nmaster = 1
    .ncol = 2
 
 with awful.layout
    .layouts = {
       lainLayout.uselesspiral.dwindle,
       lainLayout.uselessfair.horizontal,
-      lainLayout.centerwork
-      lainLayout.centerfair
+      lainLayout.uselessfair.vertical,
+      lainLayout.centerwork,
+      lainLayout.centerfair,
       .suit.max.fullscreen,
       .suit.floating
    }
@@ -73,7 +74,8 @@ switcher = (all) ->
       "-hlbg '#{beautiful.bg_focus}'",
       "-hlfg '#{beautiful.fg_focus}'",
       "-bg '#{beautiful.bg_normal}'",
-      "-fg '#{beautiful.fg_normal}'"
+      "-fg '#{beautiful.fg_normal}'",
+      "-font 'Input:pixelsize=14'"
 
 -- {{{ Wallpaper
 if beautiful.wallpaper
@@ -84,9 +86,9 @@ if beautiful.wallpaper
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
-spotifyIcon = "<span rise='1000'>6</span> <span font='FontAwesome 12' color='#84bd00'>  </span>"
-lineIcon = "7 <span font='FontAwesome 10'>  </span>"
-mytags = awful.tag({ 1, 2, 3, 4, 5, spotifyIcon, lineIcon }, s, awful.layout.layouts[1])
+musicIcon = "6 <span font='FontAwesome 10'>  </span>"
+chatIcon = "7 <span font='FontAwesome 10'>  </span>"
+mytags = awful.tag({ 1, 2, 3, 4, 5, musicIcon, chatIcon }, s, awful.layout.layouts[1])
 for s = 1, screen.count!
    -- Duplicate tags for each screen
    tags[s] = mytags
@@ -99,7 +101,7 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- {{{ Wibox
 -- Create a textclock widget
 myclock = tzclock("EDT", -5)
-nswclock = tzclock("AEST", 10)
+nswclock = tzclock("AEST", 9) -- Doesn't account for daylight time
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -217,7 +219,7 @@ globalkeys = do
          -- Standard programs
          f: -> launch "thunar"
          e: -> shell editor_cmd
-         w: -> launch "chromium"
+         w: -> launch "google-chrome-beta"
          r: -> launch "xboomx", false
          "Return": -> launch terminal
          -- Jump between tags
@@ -321,7 +323,12 @@ awful.rules.rules = {
          buttons: clientbuttons
    }
    {
-      -- Startup in Spotify tag
+      -- Start Slack in chat tag
+      rule: instance: "crx_cnjajkcaapiegeibkcdbomdebcjoklnl"
+      properties: tag: mytags[7]
+   }
+   {
+      -- Start Spotify in music tag
       rule: class: "Spotify"
       properties: tag: mytags[6]
    }

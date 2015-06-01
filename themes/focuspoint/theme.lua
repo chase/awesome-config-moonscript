@@ -14,7 +14,7 @@ theme.wallpaper = curdir.."wallpaper.png"
 -- }}}
 
 -- {{{ Styles
-theme.font      = "Sego UI 9"
+theme.font      = "Fira Sans 9"
 
 -- {{{ Colors
 theme.fg_normal  = "#F8F8F2"
@@ -29,7 +29,7 @@ theme.bg_systray = theme.bg_normal
 -- {{{ Borders
 theme.border_width  = 1
 theme.border_normal = "#3F3F3F"
-theme.border_focus  = "#6F6F6F"
+theme.border_focus  = "#9F9F9F"
 theme.border_marked = "#CC9393"
 -- }}}
 
