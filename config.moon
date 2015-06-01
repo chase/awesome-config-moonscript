@@ -35,7 +35,7 @@ shell = (...)-> awful.util.spawn_with_shell(table.concat({...}," "), false)
 shell "killall compton; sleep 2s && compton",
    "-cCzG -t-3 -l-5 -r4",
    "--config /dev/null",
-   "--backend glx --xrender-sync-fence --unredir-if-possible",
+   "--backend xr_glx_hybrid --unredir-if-possible",
    "--shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c || bounding_shaped'"
 
 -- {{{ Variable definitions
