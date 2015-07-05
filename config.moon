@@ -43,7 +43,7 @@ shell "killall compton; sleep 2s && compton",
 beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
 terminal = "urxvt"
-editor_cmd = "cd ~/Development && urxvt -e vim"
+editor_cmd = "cd ~/Development && urxvt -e vim -c 'Unite directory -no-split -start-insert -default-action=cd'"
 
 modkey = "Mod4"
 
