@@ -156,11 +156,11 @@ for s = 1, screen.count!
    mylayoutbox[s]\buttons do
       :layouts, :inc = awful.layout
       mouseHandler
-         left: -> inc(layouts, 1, 1)
-         right: -> inc(layouts, -1, 1)
+         left: -> inc(1)
+         right: -> inc(-1)
          scroll:
-            up: -> inc(layouts, 1, 1)
-            down: -> inc(layouts, -1, 1)
+            up: -> inc(1)
+            down: -> inc(-1)
    -- Create a taglist widget
    mytaglist[s] = taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
@@ -236,7 +236,7 @@ globalkeys = do
          u: awful.client.urgent.jumpto
          "Tab": -> switcher(true)
          ";": -> switcher(false)
-         space: -> awful.layout.inc(awful.layout.layouts, 1, 1)
+         space: -> awful.layout.inc(1)
          -- Menubar
          p: -> menubar.show!
 
@@ -245,7 +245,7 @@ globalkeys = do
             k: -> awful.client.swap.byidx(-1)
             h: -> awful.tag.incnmaster(1)
             l: -> awful.tag.incnmaster(-1)
-            space: -> awful.layout.inc(awful.layout.layouts,-1, 1)
+            space: -> awful.layout.inc(-1)
             n: awful.client.restore
 
          ctrl:
@@ -327,7 +327,7 @@ awful.rules.rules = {
    }
    {
       -- Start Slack in chat tag
-      rule: instance: "crx_cnjajkcaapiegeibkcdbomdebcjoklnl"
+      rule: instance: "crx_ifchmgpgmnpcogpccmnglkpffekihlgf"
       properties: tag: mytags[7]
    }
    {

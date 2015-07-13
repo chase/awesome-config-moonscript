@@ -39,7 +39,7 @@ batteryWidget = (options={}) ->
       return  unless current
       full = readBattery('energy_full') or readBattery('charge_full')
       return  unless full
-      percentage = current / full * 100
+      percentage = math.floor(current / full * 100)
       batteryPercent = string.format(" %d%% ", percentage)
       if percentage <= opt.critical.percent
          return textbox\set_markup "<span color='#{opt.critical.color}'>#{batteryPercent}</span>"
