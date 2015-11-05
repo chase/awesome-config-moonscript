@@ -217,7 +217,7 @@ globalkeys = do
          -- Standard programs
          f: -> launch "thunar"
          e: -> shell editor_cmd
-         w: -> launch "chromium"
+         w: -> launch "google-chrome"
          r: -> launch "xboomx", false
          "Return": -> launch terminal
          -- Jump between tags
@@ -322,7 +322,7 @@ awful.rules.rules = {
    }
    {
       -- Start Slack in chat tag
-      rule: instance: "crx_ifchmgpgmnpcogpccmnglkpffekihlgf"
+      rule: class: "Slack"
       properties: tag: mytags[7]
    }
    {
