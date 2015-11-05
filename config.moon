@@ -56,10 +56,8 @@ with awful.layout
       lainLayout.uselesspiral.dwindle,
       lainLayout.uselessfair.horizontal,
       lainLayout.uselessfair.vertical,
-      lainLayout.centerwork,
-      lainLayout.centerfair,
-      .suit.max.fullscreen,
-      .suit.floating
+      .suit.floating,
+      .suit.max.fullscreen
    }
 -- }}}
 
@@ -155,11 +153,11 @@ for s = 1, screen.count!
    mylayoutbox[s]\buttons do
       :layouts, :inc = awful.layout
       mouseHandler
-         left: -> inc(1)
-         right: -> inc(-1)
+         left: -> inc(layouts, 1)
+         right: -> inc(layouts, -1)
          scroll:
-            up: -> inc(1)
-            down: -> inc(-1)
+            up: -> inc(layouts, 1)
+            down: -> inc(layouts, -1)
    -- Create a taglist widget
    mytaglist[s] = taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
 
@@ -235,16 +233,16 @@ globalkeys = do
          u: awful.client.urgent.jumpto
          "Tab": -> switcher(true)
          ";": -> switcher(false)
-         space: -> awful.layout.inc(1)
+         space: -> awful.layout.inc(awful.layout.layouts, 1)
          -- Menubar
          p: -> menubar.show!
 
          shift:
             j: -> awful.client.swap.byidx(1)
             k: -> awful.client.swap.byidx(-1)
-            h: -> awful.tag.incnmaster(1)
-            l: -> awful.tag.incnmaster(-1)
-            space: -> awful.layout.inc(-1)
+            h: -> awful.tag.incnmaster(awful.layout.layouts, 1)
+            l: -> awful.tag.incnmaster(awful.layout.layouts, -1)
+            space: -> awful.layout.inc(awful.layout.layouts, -1)
             n: awful.client.restore
 
          ctrl:
