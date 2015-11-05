@@ -99,7 +99,6 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- {{{ Wibox
 -- Create a textclock widget
 myclock = tzclock("EDT", -5)
-nswclock = tzclock("AEST", 9) -- Doesn't account for daylight time
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -176,7 +175,6 @@ for s = 1, screen.count!
    right_layout = wibox.layout.fixed.horizontal!
    right_layout\add(wibox.widget.systray!)
    right_layout\add(myclock)
-   right_layout\add(nswclock)
    if mybattery = battery!
       right_layout\add(mybattery)
    right_layout\add(mylayoutbox[s])
