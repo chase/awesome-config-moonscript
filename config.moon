@@ -98,7 +98,7 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibox
 -- Create a textclock widget
-myclock = tzclock("EDT", -5)
+myclock = tzclock("CST", -6)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
