@@ -344,6 +344,7 @@ awful.rules.rules = {
 
 -- Enable sloppy focus
 client.connect_signal("mouse::enter", (c)->
+   return  if c.minimized
    return  if awful.layout.get(c.screen) == awful.layout.suit.magnifier
    client.focus = c  if awful.client.focus.filter(c))
 
