@@ -324,6 +324,11 @@ awful.rules.rules = {
          buttons: clientbuttons
    }
    {
+      -- Start LINE in chat tag
+      rule: instance: "crx_menkifleemblimdogmoihpfopnplikde"
+      properties: tag: mytags[7]
+   }
+   {
       -- Start Slack in chat tag
       rule: class: "Slack"
       properties: tag: mytags[7]
