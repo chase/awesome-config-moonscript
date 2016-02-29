@@ -36,10 +36,13 @@ shell = (...)-> awful.util.spawn_with_shell(table.concat({...}," "), false)
 shell "killall compton; sleep 2s && compton",
    "-cCzG -t-3 -l-5 -r4",
    "--config /dev/null",
-   "--backend glx --unredir-if-possible --paint-on-overlay",
-   "--vsync opengl-mswc --refresh-rate 59.95",
-   "--unredir-if-possible-delay 1",
-   "--glx-no-stencil --xrender-sync",
+   "--backend glx --paint-on-overlay",
+   "--vsync opengl-swc",
+   "--glx-swap-method -1",
+   "--detect-transient",
+   "--detect-client-leader",
+   "--dbe",
+   "--unredir-if-possible",
    "--shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c || bounding_shaped'"
 
 -- {{{ Variable definitions
