@@ -36,13 +36,13 @@ shell = (...)-> awful.util.spawn_with_shell(table.concat({...}," "), false)
 shell "killall compton; sleep 2s && compton",
    "-cCzG -t-3 -l-5 -r4",
    "--config /dev/null",
-   "--backend glx --paint-on-overlay",
-   "--vsync opengl-swc",
+   "--backend glx",
+   "--vsync drm",
    "--glx-swap-method -1",
-   "--detect-transient",
-   "--detect-client-leader",
+   "--glx-no-stencil",
    "--dbe",
    "--unredir-if-possible",
+   "--paint-on-overlay",
    "--shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c || bounding_shaped'"
 
 -- {{{ Variable definitions
@@ -50,8 +50,6 @@ beautiful.init(curdir.."themes/focuspoint/theme.lua")
 
 terminal = "urxvt"
 editor_cmd = "cd ~/Development && urxvt -e vim -c 'Unite directory -no-split -start-insert -default-action=cd'"
-
-modkey = "Mod4"
 
 with lainLayout.centerfair
    .nmaster = 1
@@ -92,10 +90,9 @@ if beautiful.wallpaper
 tags = {}
 musicIcon = "6 <span font='FontAwesome 10'>  </span>"
 chatIcon = "7 <span font='FontAwesome 10'>  </span>"
-mytags = awful.tag({ 1, 2, 3, 4, 5, musicIcon, chatIcon }, s, awful.layout.layouts[1])
 for s = 1, screen.count!
    -- Duplicate tags for each screen
-   tags[s] = mytags
+   tags[s] = awful.tag({ 1, 2, 3, 4, 5, musicIcon, chatIcon }, s, awful.layout.layouts[1])
 -- }}}
 
 -- Menubar configuration
@@ -329,17 +326,17 @@ awful.rules.rules = {
    {
       -- Start LINE in chat tag
       rule: instance: "crx_menkifleemblimdogmoihpfopnplikde"
-      properties: tag: mytags[7]
+      properties: tag: tags[1][7]
    }
    {
       -- Start Slack in chat tag
       rule: class: "Slack"
-      properties: tag: mytags[7]
+      properties: tag: tags[1][7]
    }
    {
       -- Start Spotify in music tag
       rule: class: "Spotify"
-      properties: tag: mytags[6]
+      properties: tag: tags[1][6]
    }
    {
       rule: class: "Oblogout"
