@@ -1,11 +1,4 @@
-naughty = require "naughty"
 wibox = require "wibox"
-
-readFirstLine = (filename) ->
-   -- io.lines is an iterator, first call is the first line
-   ok, val = pcall(io.lines, filename)
-   return nil  if not ok
-   return io.lines(filename)!
 
 batteryWidget = (options={}) ->
    opt = {
@@ -22,7 +15,11 @@ batteryWidget = (options={}) ->
    }
 
    readBattery = (var) ->
-      return readFirstLine('/sys/class/power_supply/'..opt.battery..'/'..var)
+      ok, f = pcall(io.open,'/sys/class/power_supply/'..opt.battery..'/'..var,'r')
+      return nil  if not ok or not f
+      line = f\lines!!
+      f\close!
+      return line
 
    -- Override the options given as an argument
    opt[key] = value for key, value in pairs options
